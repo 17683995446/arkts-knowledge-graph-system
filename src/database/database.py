@@ -365,6 +365,49 @@ class Database:
         return result
 
     @log_function
+    def get_all_functions(self) -> List[Dict[str, Any]]:
+        logger.debug(f"[get_all_functions] Querying all functions")
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT id, file_id, name, line_start, line_end, content FROM functions')
+        rows = cursor.fetchall()
+        result = [
+            {'id': row[0], 'file_id': row[1], 'name': row[2], 'line_start': row[3], 'line_end': row[4], 'content': row[5]}
+            for row in rows
+        ]
+        logger.debug(f"[get_all_functions] Found {len(result)} functions")
+        return result
+
+    @log_function
+    def get_all_classes(self) -> List[Dict[str, Any]]:
+        logger.debug(f"[get_all_classes] Querying all classes")
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT id, file_id, name, line_start, line_end, content FROM classes')
+        rows = cursor.fetchall()
+        result = []
+        for row in rows:
+            class_info = {
+                'id': row[0], 'file_id': row[1], 'name': row[2], 
+                'line_start': row[3], 'line_end': row[4], 'content': row[5],
+                'methods': self.get_class_methods(row[0])
+            }
+            result.append(class_info)
+        logger.debug(f"[get_all_classes] Found {len(result)} classes")
+        return result
+
+    @log_function
+    def get_all_imports(self) -> List[Dict[str, Any]]:
+        logger.debug(f"[get_all_imports] Querying all imports")
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT id, file_id, source, symbol FROM imports')
+        rows = cursor.fetchall()
+        result = [
+            {'id': row[0], 'file_id': row[1], 'source': row[2], 'symbol': row[3]}
+            for row in rows
+        ]
+        logger.debug(f"[get_all_imports] Found {len(result)} imports")
+        return result
+
+    @log_function
     def close(self):
         logger.debug(f"[close] Closing database connection")
         if self.conn:
