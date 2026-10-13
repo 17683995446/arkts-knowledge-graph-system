@@ -12,7 +12,7 @@ from src.web.app import init_app, run_server
 def main():
     parser = argparse.ArgumentParser(description='ArkTS 代码知识图谱系统')
     parser.add_argument('path', nargs='?', default='.', help='要监听和扫描的目录路径')
-    parser.add_argument('--api-key', default='sk-uqelhavcdhfxjzjesdenxpbtqombamjniazzjtbssmdcwdvg', help='硅基流动 API 密钥')
+    parser.add_argument('--api-key', default='REDACTED_API_KEY', help='硅基流动 API 密钥')
     parser.add_argument('--full-scan', action='store_true', help='启动时执行全量扫描')
     parser.add_argument('--port', type=int, default=5000, help='Web 服务器端口')
     parser.add_argument('--no-watch', action='store_true', help='不启动文件监听')
